@@ -1,4 +1,8 @@
 {
-	"extraScripts": ["codemirror/autoCompleteLatex.ts"]
+	"extraScripts": [
+		"codemirror/autocompletion.ts",
+		"codemirror/types.ts",
+		"codemirror/classes.ts"
+	]
 	
 }

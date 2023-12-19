@@ -6,7 +6,7 @@
     "prepare": "npm run dist",
     "updateVersion": "webpack --env joplin-plugin-config=updateVersion",
     "update": "npm install -g generator-joplin && yo joplin --node-package-manager npm --update",
-    "run":"flatpak run net.cozic.joplin_desktop --env dev"
+    "run": "flatpak run net.cozic.joplin_desktop --env dev"
   },
   "license": "MIT",
   "keywords": [
@@ -29,8 +29,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "@codemirror/view": "^6.22.2",
-    "codemirror":"^6.0.1"
-
+    "@types/codemirror": "^5.60.15",
+    "codemirror": "^5.65.16"
   }
 }

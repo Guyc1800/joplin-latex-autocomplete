@@ -33,7 +33,7 @@ joplin.plugins.register({
 		joplin.contentScripts.register(
 			ContentScriptType.CodeMirrorPlugin,
 			"latexAutocomplete",
-			"./codemirror/autoCompleteLatex.js"
+			"./codemirror/autocompletion.js"
 		);
 		await joplin.commands.register({
 			name: 'printSomething',
