@@ -1,0 +1,4 @@
+{
+	"extraScripts": ["codemirror/autoCompleteLatex.ts"]
+	
+}

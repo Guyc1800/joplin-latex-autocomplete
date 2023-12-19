@@ -1,0 +1,15 @@
+{
+	"manifest_version": 1,
+	"id": "com.latexAutocomplete",
+	"app_min_version": "2.12",
+	"version": "1.0.0",
+	"name": "latex autocomplete",
+	"description": "bla bla bla",
+	"author": "",
+	"homepage_url": "",
+	"repository_url": "",
+	"keywords": [],
+	"categories": [],
+	"screenshots": [],
+	"icons": {}
+}
