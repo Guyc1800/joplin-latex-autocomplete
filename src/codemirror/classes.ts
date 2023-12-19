@@ -17,7 +17,7 @@ export default class Autocomplete{
     private
     triggerHints(){
         const pos = this.doc.getCursor();
-        console.log(pos);
+        console.log(pogs);
         
     }
 }
