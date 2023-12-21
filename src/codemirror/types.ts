@@ -13,7 +13,7 @@ export interface Hint {
 
 }
 
-interface Completion {
+export interface Completion {
     from: Position;
     to: Position;
     list: Hint[];
