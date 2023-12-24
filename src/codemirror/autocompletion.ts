@@ -1,5 +1,4 @@
 // this file is for joplin 2.13 anxd below and codemirror 5
-								// import ContextMsgType from "abc"
 /*
 find where to activate autocomplete(latex area)--
 1. to find if inside a latex box aka ($$ here$$) where each one on seperate lines 
@@ -14,10 +13,7 @@ events CM check out https://codemirror.net/5/doc/manual.html#events
 cm.setOption(option: string, value: any) // command to change config
 cm.getViewport() => line range. search only within those lines where to autocomplete???
 */
-
-
-import joplin from "api"
-import { Position, Editor } from "codemirror";
+import {  Editor } from "codemirror";
 import { ExtendedEditor } from "./types";
 import Autocomplete from "./classes";
 import CodeMirror = require("codemirror");
@@ -32,8 +28,6 @@ module.exports = {
 
 		return { 
 			plugin: function(cm){		
-                console.log(cm);
-                
 				cm.defineOption("enableLatex",false, async function(cm, val ,old){
                     // when the editor is initialized the function will be called and val will be true
 					if(val){
@@ -47,9 +41,11 @@ module.exports = {
 			},
 			codeMirrorResources: ['addon/hint/show-hint'],
 			codeMirrorOptions: {'lineNumbers': true,firstLineNumber:0,enableLatex:true},
-			assets: function() { // for css files and such
+			assets: function() {
 				return [
-
+					{
+						name:'./autocomplete.css'
+					}
 				];
 			},
 		}
