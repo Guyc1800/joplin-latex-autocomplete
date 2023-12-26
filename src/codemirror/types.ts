@@ -1,4 +1,4 @@
-import { Position,Editor } from "codemirror";
+import { Position,Editor, KeyMap } from "codemirror";
 export interface Hint {
     text: string;//the output after completion
     displayText?: string; // the keyword short
@@ -21,6 +21,7 @@ export interface Completion {
 
 export type ExtendedEditor = {
     showHint(options: {
+        alignWithWord?:boolean;
         completeSingle: boolean;
         closeCharacters: RegExp;
         closeOnUnfocus: boolean;

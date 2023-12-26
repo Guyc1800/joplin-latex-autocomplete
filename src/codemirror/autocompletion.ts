@@ -27,13 +27,17 @@ module.exports = {
         // }
 
 		return { 
-			plugin: function(cm){		
-				cm.defineOption("enableLatex",false, async function(cm, val ,old){
+			plugin: function(codemirror){	
+				console.log(codemirror);
+				
+				codemirror.defineOption("enableLatex",false, async function(cm, val ,old){
                     // when the editor is initialized the function will be called and val will be true
 					if(val){
 						// async function backoff(timeout:number){
 						// 	const settings = await get_settings();
 						// }
+						console.log(cm);
+						
                         new Autocomplete(context, cm as ExtendedEditor & Editor, CodeMirror);
 					}
 				});

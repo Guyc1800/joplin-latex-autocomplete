@@ -1,4 +1,5 @@
 import joplin from "api";
-import { SettingItemType
- } from "api/types";
+import { SettingItemType } from "api/types";
+
+
 
