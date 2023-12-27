@@ -1,16 +1,12 @@
 import { Position,Editor, KeyMap } from "codemirror";
+import { Compilation } from "webpack";
 export interface Hint {
-    text: string;//the output after completion
-    displayText?: string; // the keyword short
+    text: string;//the completion output
+    displayText?: string; // the text on the left
     className?: string; 
-    description?: string;// description
+    description?: string;
     render?: (container: Element, completion: Completion, hint: Hint) => void;
-    //TODO hint?: (cm: typeof CodeMirror, completion: Completion, hint: Hint) => void;
     inline: boolean;
-    //TODO container:Element|null custom container for the widget
-//     select (completion, Element)
-// Fired when a completion is selected. Passed the completion value (string or object) and the DOM node that represents it in the menu.
-
 }
 export interface Completion {
     from: Position;

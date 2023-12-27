@@ -28,6 +28,9 @@
 }
 .Latex-description-span {
     margin-left: 1em;
-    font-size: 0.8em;
+    font-size: 1em;
     color: var(--joplin-color-faded);
+}
+.Latex-highlight-span{
+    color: blue;
 }
