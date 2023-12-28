@@ -42,8 +42,9 @@ export default class Autocomplete{
     triggerHints(keybind?:boolean){
         this.cursor = this.doc.getCursor();
         const {line:cursorLine,ch:cursorCh}=this.cursor
-    
-        //@param charAfter check that there is no char other then space after the cursor pos
+        /**
+         * @param {boolean} charAfter checks of there is something other then space after the cursor. 
+        */
         const charAfter:boolean =!/\S/.test(this.doc.getRange(this.cursor,{line:cursorLine, ch:cursorCh+1}))
         char
         if(keybind){
