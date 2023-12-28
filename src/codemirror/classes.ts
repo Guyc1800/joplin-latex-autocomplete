@@ -33,6 +33,7 @@ export default class Autocomplete{
         });
     }    
     // private isActive:boolean;
+    private open:boolean;// flag if the autocomplete is open
     private readonly doc=this.editor.getDoc();
     private symbolRange?: {from:Position, to:Position};
     private cursor:Position;
@@ -49,7 +50,7 @@ export default class Autocomplete{
         charAfter = this.enableinline || !charAfter 
         const cmMode = this.editor.getModeAt(this.cursor).name;
         if(!charAfter|| cmMode!=="setx"){/*TODO*add settings option to enable outside latex block*/
-            return //TODO check
+            return 
         }
         if(keybind){
             const lineText=this.editor.getRange({line:cursorLine,ch:0},this.cursor);
@@ -72,9 +73,11 @@ export default class Autocomplete{
             }
             this.symbolRange={from:symbolRange[0],to:symbolRange[1]}
         }
+        console.log("trigger passed");
         this.startCompletion()
     }
     private startCompletion(){
+        this.open = true;
         this.editor.showHint({
             closeCharacters:/\s/,
             closeOnUnfocus:false,//TODO set to ture once built 
@@ -87,6 +90,7 @@ export default class Autocomplete{
     private async getCompletion()  : Promise<Completion | undefined> {
         const {line, ch} = this.symbolRange.to; // the pos where trigger symbol ends
         if(this.cursor.line < line || this.cursor.ch < ch){
+            this.open=false;
             return;// return if the cursor is before the trigger symbol
         }
         const keyword = this.doc.getRange({line,ch},this.cursor);// the chars after the triggersymbol of the completion
@@ -95,16 +99,19 @@ export default class Autocomplete{
         const completion: Completion ={
             from:completionFrom,
             to: CompletionTo,
-            list:this.getHints(
-                keyword,
-                this.doc.getRange({line:this.cursor.line, ch:0},{line:this.cursor.line, ch:this.cursor.ch-1}) //FIXME check if it fits the code
-            ),
+            list:this.getHints(keyword)
         };
+        CodeMirror.on(completion,"close",()=>{
+            this.open =false;
+            console.log("open is false");
+            CodeMirror.off(completion,"close",()=>{console.log("removed handler");
+            });
+        })
         console.log(completion);
         //TODO CodeMirror.on(completion,"select",(a?)=>{console.log(a);})
         return completion;
     }
-    private getHints(keyword:string, indent:string): Hint[]{
+    private getHints(keyword:string): Hint[]{
         let completions:Hint[];
         let includes = [];
         let startwith=[];
