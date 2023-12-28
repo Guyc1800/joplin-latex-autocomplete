@@ -24,13 +24,13 @@ export default class Autocomplete{
         this.editor.on('cursorActivity', this.triggerHints.bind(this));
         console.log(editor);
         console.log(CodeMirror);
-        
+        //TODO add flag that shows if the widget is open or not 
         this.editor.setOption("extraKeys",{
             'Ctrl-Space':()=> {
+                this.triggerHints.bind(this);
                 this.triggerHints(true)
             }
         });
-        // this.triggerHints.bind(this)})//TODO add ctrl-space trigger
     }    
     // private isActive:boolean;
     private readonly doc=this.editor.getDoc();
@@ -38,35 +38,41 @@ export default class Autocomplete{
     private cursor:Position;
     private readonly trigger_symbol = '\\';
     private readonly enableinline =true //TODO settings to enable autocomplete when there is chars after the triggersymbol  
-
+    /** this function handle triggers from editor and keyboard then decide if to activate autocomplete  
+     *  @param keybind flag to indecate if the action came from keybind(ctrl-space) or cursor activity */
     triggerHints(keybind?:boolean){
+        
         this.cursor = this.doc.getCursor();
         const {line:cursorLine,ch:cursorCh}=this.cursor
-        /**
-         * @param {boolean} charAfter checks of there is something other then space after the cursor. 
-        */
-        const charAfter:boolean =!/\S/.test(this.doc.getRange(this.cursor,{line:cursorLine, ch:cursorCh+1}))
-        char
+        /** @param {boolean} charAfter checks of there is something other then space after the cursor.(false for space, true for letter) */
+        let charAfter =!/\S/.test(this.doc.getRange(this.cursor,{line:cursorLine, ch:cursorCh+1}))
+        charAfter = this.enableinline || !charAfter 
+        const cmMode = this.editor.getModeAt(this.cursor).name;
+        if(!charAfter|| cmMode!=="setx"){/*TODO*add settings option to enable outside latex block*/
+            return //TODO check
+        }
         if(keybind){
             const lineText=this.editor.getRange({line:cursorLine,ch:0},this.cursor);
-            if(/\s/.test(lineText.substring(lineText.lastIndexOf(this.trigger_symbol),cursorCh))
-            && this.editor.getRange(this.cursor,{line:cursorLine,ch:cursorCh+1})!==" "){
-                this.symbolRange
+            if(!lineText.includes(this.trigger_symbol)){//in case there is no trigger symbol 
+                this.symbolRange={from:this.cursor, to:{line:cursorLine,ch:cursorCh+1}}
             }
-            this.symbolRange ={from}
-            return
-            "asd".
+            else{
+                const triggerToCursor= lineText.substring(lineText.lastIndexOf(this.trigger_symbol))// substring between crusor and trigger 
+                if(/\s/.test(triggerToCursor) || triggerToCursor.length===0){// checks for space between the cursor and the trigger symbol and the length
+                    return
+                }
+                this.symbolRange ={from:{line:cursorLine,ch:lineText.lastIndexOf(this.trigger_symbol)},to:{line:cursorLine,ch:lineText.lastIndexOf(this.trigger_symbol)+1}}
+            }
         }
-        const symbolRange = [{ line: cursorLine, ch: cursorCh - this.trigger_symbol.length }, this.cursor] as const;
-        const chars = this.doc.getRange(...symbolRange);
-        const cmMode = this.editor.getModeAt(this.cursor).name;
-        if(chars === this.trigger_symbol
-            &&(!/\S/.test(this.doc.getRange(this.cursor,{line:cursorLine, ch:cursorCh+1}))|| this.enableinline) 
-            && (cmMode==="stex"/*TODO*add settings option to enable outside latex block*/)
-            ){
+        else{//incase completion from trigger symbol
+            const symbolRange = [{ line: cursorLine, ch: cursorCh - this.trigger_symbol.length }, this.cursor] as const;
+            const chars = this.doc.getRange(...symbolRange);
+            if(chars !== this.trigger_symbol){
+                return
+            }
             this.symbolRange={from:symbolRange[0],to:symbolRange[1]}
-            //second statment is to check that there is no char other then space after the cursor pos  
         }
+        this.startCompletion()
     }
     private startCompletion(){
         this.editor.showHint({
@@ -94,6 +100,7 @@ export default class Autocomplete{
                 this.doc.getRange({line:this.cursor.line, ch:0},{line:this.cursor.line, ch:this.cursor.ch-1}) //FIXME check if it fits the code
             ),
         };
+        console.log(completion);
         //TODO CodeMirror.on(completion,"select",(a?)=>{console.log(a);})
         return completion;
     }
