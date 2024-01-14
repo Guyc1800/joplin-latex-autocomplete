@@ -1,5 +1,4 @@
 {
-  "history": ["\\alpha"],
   "dict": [
     {
       "text":"\\={}",
@@ -69,7 +68,7 @@
     },
     {
       "text":"\\sum_{\n\\begin{subarray}{l}\n   i\\in\\Lambda\\\\\n   0<j<n\n\\end{subarray}}",
-      "displayText":"\\sum_",
+      "displayText":"\\sum1",
       "description":"env cont E",
       "inline":false
     },
@@ -80,15 +79,33 @@
       "inline":false
     },
     {
+      "text":"\\begin{equation*}\n\\end{equation*}",
+      "displayText":"\\equation*",
+      "description":"env cont",
+      "inline":false
+    },
+    {
       "text":"\\begin{gather}\n\\end{gather}",
       "displayText":"\\gather",
       "description":"env cont li",
       "inline":false
     },
     {
+      "text":"\\begin{gather*}\n\\end{gather*}",
+      "displayText":"\\gather*",
+      "description":"env cont",
+      "inline":false
+    },
+    {
       "text":"\\begin{align}\n\\end{align}",
       "displayText":"\\align",
       "description":"env cont pos li",
+      "inline":false
+    },
+    {
+      "text":"\\begin{align*}\n\\end{align*}",
+      "displayText":"\\align*",
+      "description":"env cont pos",
       "inline":false
     },
     {
