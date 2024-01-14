@@ -1,5 +1,4 @@
 import { Position,Editor, KeyMap } from "codemirror";
-import { Compilation } from "webpack";
 export interface Hint {
     text: string;//the completion output
     displayText?: string; // the text on the left

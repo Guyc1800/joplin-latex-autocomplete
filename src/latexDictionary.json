@@ -1,0 +1,336 @@
+{
+  "history": ["\\alpha"],
+  "dict": [
+    {
+      "text":"\\={}",
+      "displayText":"\\bar",
+      "description":"bar above",
+      "inline":true
+    },
+    {
+      "text":"\\underbar{}",
+      "displayText":"\\underbar",
+      "description":"underbar",
+      "inline":true
+    },
+    {
+      "text":"\\.{}",
+      "displayText":"\\dot",
+      "description":"dot above",
+      "inline":true
+    },
+    {
+      "text":"\\\"{}",
+      "displayText":"\\ddot",
+      "description":"2dot above",
+      "inline":true
+    },
+    {
+      "text":"\\~{}",
+      "displayText":"\\tilde",
+      "description":"~ above",
+      "inline":true
+    },
+    {
+      "text":"\\r{}",
+      "displayText":"\\mathring",
+      "description":"ring above",
+      "inline":true
+    },
+    {
+      "text":"\\begin{matrix}\n\\end{matrix}",
+      "displayText":"\\matrix",
+      "description":"env float !deli",
+      "inline":false
+    },
+    {
+      "text":"\\begin{pmatrix}\n\\end{pmatrix}",
+      "displayText":"\\pmatrix",
+      "description":"env float deli()",
+      "inline":false
+    },
+    {
+      "text":"\\begin{vmatrix}\n\\end{vmatrix}",
+      "displayText":"\\vmatrix",
+      "description":"env float deli||",
+      "inline":false
+    },
+    {
+      "text":"\\begin{Bmatrix}\n\\end{Bmatrix}",
+      "displayText":"\\Bmatrix",
+      "description":"env float deli{}",
+      "inline":false
+    },
+    {
+      "text":"x=\\begin{cases}\n\\end{cases}",
+      "displayText":"\\cases",
+      "description":"env cont deli{",
+      "inline":false
+    },
+    {
+      "text":"\\sum_{\n\\begin{subarray}{l}\n   i\\in\\Lambda\\\\\n   0<j<n\n\\end{subarray}}",
+      "displayText":"\\sum_",
+      "description":"env cont E",
+      "inline":false
+    },
+    {
+      "text":"\\begin{equation}\n\\end{equation}",
+      "displayText":"\\equation",
+      "description":"env cont li",
+      "inline":false
+    },
+    {
+      "text":"\\begin{gather}\n\\end{gather}",
+      "displayText":"\\gather",
+      "description":"env cont li",
+      "inline":false
+    },
+    {
+      "text":"\\begin{align}\n\\end{align}",
+      "displayText":"\\align",
+      "description":"env cont pos li",
+      "inline":false
+    },
+    {
+      "text":"\\Delta",
+      "displayText":"\\Delta",
+      "description":"big delta letter",
+      "inline":true
+    },
+    {
+      "text":"\\Theta",
+      "displayText":"\\Theta",
+      "description":"big Theta letter",
+      "inline":true
+    },
+    {
+      "text":"\\Lambda",
+      "displayText":"\\Lambda",
+      "description":"big Lambda letter",
+      "inline":true
+    },
+    {
+      "text":"\\Sigma",
+      "displayText":"\\Sigma",
+      "description":"big Sigma letter",
+      "inline":true
+    },
+    {
+      "text":"\\Omega",
+      "displayText":"\\Omega",
+      "description":"big Omega letter",
+      "inline":true
+    },
+    {
+      "text":"\\alpha",
+      "displayText":"\\alpha",
+      "description":"alpha letter",
+      "inline":true
+    },
+    {
+      "text":"\\beta",
+      "displayText":"\\beta",
+      "description":"beta letter",
+      "inline":true
+    },
+    {
+      "text":"\\gamma",
+      "displayText":"\\gamma",
+      "description":"gamma letter",
+      "inline":true
+    },
+    {
+      "text":"\\delta",
+      "displayText":"\\delta",
+      "description":"delta letter",
+      "inline":true
+    },
+    {
+      "text":"\\infty",
+      "displayText":"\\infty",
+      "description":"infinity 8",
+      "inline":true
+    },
+    {
+      "text":"\\N",
+      "displayText":"\\N",
+      "description":"num grp",
+      "inline":true
+    },
+    {
+      "text":"\\R",
+      "displayText":"\\R",
+      "description":"num grp",
+      "inline":true
+    },
+    {
+      "text":"\\C",
+      "displayText":"\\C",
+      "description":"num grp",
+      "inline":true
+    },
+    {
+      "text":"\\forall",
+      "displayText":"\\forall",
+      "description":"num grp opr",
+      "inline":true
+    },
+    {
+      "text":"\\in",
+      "displayText":"\\in",
+      "description":"num grp opr",
+      "inline":true
+    },
+    {
+      "text":"\\notin",
+      "displayText":"\\notin",
+      "description":"num grp opr",
+      "inline":true
+    },
+    {
+      "text":"\\subset",
+      "displayText":"\\subset",
+      "description":" < num grp opr",
+      "inline":true
+    },
+    {
+      "text":"\\supset",
+      "displayText":"\\supset",
+      "description":" > num grp opr",
+      "inline":true
+    },
+    {
+      "text":"\\mid",
+      "displayText":"\\mid",
+      "description":" | num grp opr",
+      "inline":true
+    },
+    {
+      "text":"\\land",
+      "displayText":"\\land",
+      "description":"logic grp/\\ AND",
+      "inline":true
+    },
+    {
+      "text":"\\lor",
+      "displayText":"\\lor",
+      "description":"logic grp\\/ OR",
+      "inline":true
+    },
+    {
+      "text":"\\ni",
+      "displayText":"\\ni",
+      "description":"rev \\in grp opr",
+      "inline":true
+    },
+    {
+      "text":"\\notni",
+      "displayText":"\\notni",
+      "description":"num grp opr Not in",
+      "inline":true
+    },
+    {
+      "text":"\\empty",
+      "displayText":"\\empty",
+      "description":"empty grp",
+      "inline":true
+    },
+    {
+      "text":"\\implies",
+      "displayText":"\\implies",
+      "description":"==>",
+      "inline":true
+    },
+    {
+      "text":"\\impliedby",
+      "displayText":"\\impliedby",
+      "description":"<==",
+      "inline":true
+    },
+    {
+      "text":"\\iff",
+      "displayText":"\\iff",
+      "description":"<==>",
+      "inline":true
+    },
+    {
+      "text":"\\gdef\\foo#1{#1^2}",
+      "displayText":"\\macro",
+      "description":"macro with parms",
+      "inline":true
+    },
+    {
+      "text":"\\let\\foo=",
+      "displayText":"\\let",
+      "description":"variable",
+      "inline":true
+    },
+    {
+      "text":"\\sum",
+      "displayText":"\\sum",
+      "description":"sum opr",
+      "inline":true
+    },
+    {
+      "text":"\\int",
+      "displayText":"\\int",
+      "description":"integral /",
+      "inline":true
+    },
+    {
+      "text":"\\iint",
+      "displayText":"\\iint",
+      "description":"integral //",
+      "inline":true
+    },
+    {
+      "text":"\\iiint",
+      "displayText":"\\iiint",
+      "description":"integral ///",
+      "inline":true
+    },
+    {
+      "text":"\\frac{}",
+      "displayText":"\\frac",
+      "description":"fraction a/b ",
+      "inline":true
+    },
+    {
+      "text":"\\binom{}{}",
+      "displayText":"\\binom",
+      "description":"cont a above b deli ()",
+      "inline":true
+    },
+    {
+      "text":"\\sqrt[2]{}",
+      "displayText":"\\sqrt",
+      "description":"square root",
+      "inline":true
+    },
+    {
+      "text":"\\small ab",
+      "displayText":"\\small",
+      "description":"Size small",
+      "inline":true
+    },
+    {
+      "text":"\\large ab",
+      "displayText":"\\large",
+      "description":"Size large",
+      "inline":true
+    },
+    {
+      "text":"\\LARGE ab",
+      "displayText":"\\LARGE",
+      "description":"Size Larger",
+      "inline":true
+    },
+    {
+      "text":"\\huge ab",
+      "displayText":"\\huge",
+      "description":"Size huge",
+      "inline":true
+    }
+
+  ]
+}

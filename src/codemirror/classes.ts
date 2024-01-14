@@ -2,98 +2,109 @@ import { Editor } from "codemirror";
 import { ExtendedEditor,Completion ,Hint} from "./types";
 import { Position } from "codemirror";
 import CodeMirror = require("codemirror");
-const HINT_DESCRIPTION_CLASS = 'Latex-description-span';
-const HIGHLIGHT_TEXT_CLASS = 'Latex-highlight-span'
-let LatexHints: Hint[]=[
-    {
-        text:'\\alpha',
-        displayText:'\\alpha',
-        description:"α",
-        inline:false,
-    },
-    {
-        text:'inline',
-        displayText:'\\bcd',
-        description:"beta",
-        inline:true,
-    }
-]
-
+import {ContextMsgType, HIGHLIGHT_TEXT_CLASS, HINT_DESCRIPTION_CLASS, LatexConfig} from "../common";
+const fs = require("fs");
 export default class Autocomplete{
-    constructor(private readonly context,private readonly editor: ExtendedEditor & Editor, private readonly cm:typeof CodeMirror){
-        this.editor.on('cursorActivity', this.triggerHints.bind(this));
+     constructor(private readonly context,private readonly editor: ExtendedEditor & Editor, private readonly cm:typeof CodeMirror){
+        this.editor.on('cursorActivity', ()=>{
+            this.triggerHints.bind(this);
+            this.triggerHints(false);
+        }
+       );
+        this.getConfig()
+        this.getLatexDict();
         console.log(editor);
         console.log(CodeMirror);
-        //TODO add flag that shows if the widget is open or not 
         this.editor.setOption("extraKeys",{
             'Ctrl-Space':()=> {
                 this.triggerHints.bind(this);
                 this.triggerHints(true)
+            },
+            'F5':()=>{
+                this.getConfig.bind(this);
+                this.getLatexDict.bind(this);
+                this.getConfig();
+                this.getLatexDict();
             }
         });
-    }    
-    // private isActive:boolean;
-    private open:boolean;// flag if the autocomplete is open
+    }
+    private settings:LatexConfig;
     private readonly doc=this.editor.getDoc();
     private symbolRange?: {from:Position, to:Position};
     private cursor:Position;
-    private readonly trigger_symbol = '\\';
-    private readonly enableinline =true //TODO settings to enable autocomplete when there is chars after the triggersymbol  
-    /** this function handle triggers from editor and keyboard then decide if to activate autocomplete  
-     *  @param keybind flag to indecate if the action came from keybind(ctrl-space) or cursor activity */
+    private readonly TRIGGER_SYMBOL = '\\';
+    private dictionary:{dict:Hint[],history:string[]};
+    private async getConfig(){
+        this.settings = await this.context.postMessage({type:ContextMsgType.GET_CONFIG});
+    }
+    private async getLatexDict(){
+        this.dictionary=await this.context.postMessage({type:ContextMsgType.GET_DICTIONARY});
+    }
+    private async updateHistory(newHistory:string[]){
+        let content;
+        if(!fs.existsSync(this.settings.dictionaryPath)){
+            return
+        }
+        try{
+            content = JSON.parse(fs.readFileSync(this.settings.dictionaryPath,"utf-8"))
+        }catch (err){
+            console.log(err)
+        }
+        if(typeof content.history==="object"&&typeof content.dict==="object") {
+            content.history=newHistory;
+            fs.writeFileSync(this.settings.dictionaryPath,JSON.stringify(content));
+        }
+    }
+    /** this function handle triggers from editor and keyboard then decide if to activate autocomplete
+     *  @param keybind flag to indicate if the action came from keybind(ctrl-space) or cursor activity */
     triggerHints(keybind?:boolean){
-        
         this.cursor = this.doc.getCursor();
         const {line:cursorLine,ch:cursorCh}=this.cursor
-        /** @param {boolean} charAfter checks of there is something other then space after the cursor.(false for space, true for letter) */
+        /** @param {boolean} charAfter checks of there is something other than space after the cursor.(true for space, false for letter) */
         let charAfter =!/\S/.test(this.doc.getRange(this.cursor,{line:cursorLine, ch:cursorCh+1}))
-        charAfter = this.enableinline || !charAfter 
+        charAfter = this.settings.latexInline || charAfter
         const cmMode = this.editor.getModeAt(this.cursor).name;
-        if(!charAfter|| cmMode!=="setx"){/*TODO*add settings option to enable outside latex block*/
-            return 
+        if(!charAfter|| !(cmMode==="stex"|| this.settings.outsideOfSetx)){
+            return
         }
         if(keybind){
             const lineText=this.editor.getRange({line:cursorLine,ch:0},this.cursor);
-            if(!lineText.includes(this.trigger_symbol)){//in case there is no trigger symbol 
+            if(!lineText.includes(this.TRIGGER_SYMBOL)){//in case there is no trigger symbol
                 this.symbolRange={from:this.cursor, to:{line:cursorLine,ch:cursorCh+1}}
             }
             else{
-                const triggerToCursor= lineText.substring(lineText.lastIndexOf(this.trigger_symbol))// substring between crusor and trigger 
+                const triggerToCursor= lineText.substring(lineText.lastIndexOf(this.TRIGGER_SYMBOL))// substring between cursor and trigger
                 if(/\s/.test(triggerToCursor) || triggerToCursor.length===0){// checks for space between the cursor and the trigger symbol and the length
                     return
                 }
-                this.symbolRange ={from:{line:cursorLine,ch:lineText.lastIndexOf(this.trigger_symbol)},to:{line:cursorLine,ch:lineText.lastIndexOf(this.trigger_symbol)+1}}
+                this.symbolRange ={from:{line:cursorLine,ch:lineText.lastIndexOf(this.TRIGGER_SYMBOL)},to:{line:cursorLine,ch:lineText.lastIndexOf(this.TRIGGER_SYMBOL)+1}}
             }
         }
-        else{//incase completion from trigger symbol
-            const symbolRange = [{ line: cursorLine, ch: cursorCh - this.trigger_symbol.length }, this.cursor] as const;
+        else{//in case completion from trigger symbol
+            const symbolRange = [{ line: cursorLine, ch: cursorCh - this.TRIGGER_SYMBOL.length }, this.cursor] as const;
             const chars = this.doc.getRange(...symbolRange);
-            if(chars !== this.trigger_symbol){
+            if(chars !== this.TRIGGER_SYMBOL){
                 return
             }
             this.symbolRange={from:symbolRange[0],to:symbolRange[1]}
         }
-        console.log("trigger passed");
         this.startCompletion()
     }
     private startCompletion(){
-        this.open = true;
         this.editor.showHint({
             closeCharacters:/\s/,
             closeOnUnfocus:false,//TODO set to ture once built 
             completeSingle:false,
             hint:this.getCompletion.bind(this),
-            alignWithWord:false,//TODO add settings option for align
+            alignWithWord:this.settings.alignWithWord,
         });
-
     }
     private async getCompletion()  : Promise<Completion | undefined> {
         const {line, ch} = this.symbolRange.to; // the pos where trigger symbol ends
-        if(this.cursor.line < line || this.cursor.ch < ch){
-            this.open=false;
-            return;// return if the cursor is before the trigger symbol
-        }
-        const keyword = this.doc.getRange({line,ch},this.cursor);// the chars after the triggersymbol of the completion
+        // if(this.cursor.line < line || this.cursor.ch < ch){
+        //     return;// return if the cursor is before the trigger symbol
+        // }
+        const keyword = this.doc.getRange({line,ch},this.cursor);// the chars after the triggerSymbol of the completion
         const {from: completionFrom} = this.symbolRange;
         const CompletionTo = {line, ch:ch + keyword.length};
         const completion: Completion ={
@@ -101,42 +112,36 @@ export default class Autocomplete{
             to: CompletionTo,
             list:this.getHints(keyword)
         };
-        CodeMirror.on(completion,"close",()=>{
-            this.open =false;
-            console.log("open is false");
-            CodeMirror.off(completion,"close",()=>{console.log("removed handler");
-            });
-        })
-        console.log(completion);
-        //TODO CodeMirror.on(completion,"select",(a?)=>{console.log(a);})
+        // CodeMirror.on(completion,"pick",(pick?)=>{
+        //     let newHis = this.dictionary.history.filter((v)=>v!==pick.text);
+        //     this.dictionary.history=[pick.text].concat(newHis);
+        //
+        // });
         return completion;
     }
     private getHints(keyword:string): Hint[]{
         let completions:Hint[];
         let includes = [];
-        let startwith=[];
-        let history= [
-            {
-                text:'history',
-                displayText:'\\his',
-                description:"history",
-                inline:true,
-            }
-        ];        
-        if(keyword.length!==0){
-            for(let hint of LatexHints){
-                if(hint.displayText.startsWith(this.trigger_symbol+keyword))startwith.push(hint)
-                else if(hint.displayText.includes(keyword))includes.push(hint)            
-            }
-            includes.sort((a,b)=>a<b?-1:1)
-            startwith.sort((a,b)=>a<b?-1:1)
-            completions =startwith.concat(includes);
+        let startWith=[];
+        let history= [];
+        for(let hint of this.dictionary.dict){
+            if(hint.displayText.startsWith(this.TRIGGER_SYMBOL+keyword))startWith.push(hint)
+            else if(hint.displayText.includes(keyword))includes.push(hint)
         }
-        else{
-            //TODO add history management and storage, also add all of the rest after history
-            history.sort((a,b)=>a<b?-1:1)
-            completions= history
-        }
+        includes.sort((a,b)=>a<b?-1:1)
+        startWith.sort((a,b)=>a<b?-1:1)
+        completions =startWith.concat(includes);
+        // if(keyword.length===0){
+        //     completions.filter((val)=>{
+        //         if (this.dictionary.history.includes(val.text)){
+        //             history.push(val);
+        //             return false
+        //         }
+        //         return true
+        //     });
+        //     history.sort((a,b)=>a<b?-1:1)
+        //     completions= history.concat(completions);
+        // }
         return completions.map(hint => {
             let displayText = hint.displayText
             let i = displayText.search(keyword);

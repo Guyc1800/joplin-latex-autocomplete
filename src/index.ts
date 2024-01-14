@@ -1,53 +1,29 @@
 import joplin from 'api';
-import { ContentScriptType, MenuItemLocation, SettingItemType } from 'api/types';
+import {ContentScriptType, MenuItemLocation} from 'api/types';
+import {latexDictionaryObject, settings} from "./settings";
+import {ContextMsg, ContextMsgType} from "./common";
+import getConfig = settings.getConfig;
+import getDictionary = settings.getDictionary;
+
 joplin.plugins.register({
 	onStart: async function() {
-		console.log(joplin)
-		console.log(SettingItemType);
-		
-		//TODO add check version before 2.14 await joplin.versionInfo()
-		const section= "Latex"
-		await joplin.settings.registerSection(section,{label:"auto complete",})
-		const settings = {
-			arr:{
-				value:[],
-				public:true,
-				section:section,
-				type:SettingItemType.Array,
-				label:"array"
-			},
-			obj:{
-				value:{},
-				public:true,
-				section:section,
-				type:SettingItemType.Object,
-				label:"obj"
-			},
-			check:{
-				value:true,
-				public:true,
-				section:section,
-				type:SettingItemType.Bool,
-				label:"checkbox"
+		await settings.register();
+		await settings.registerMenu();
+		await joplin.contentScripts.onMessage(
+			"latexAutocomplete",
+			async (msg:ContextMsg)=>{
+				if (msg.type===ContextMsgType.GET_CONFIG){
+					return await getConfig();
+				} else if (msg.type===ContextMsgType.GET_DICTIONARY){
+					return latexDictionaryObject;
+				}
 			}
-		}
-		await joplin.settings.registerSettings(settings)
-		
-		joplin.contentScripts.register(
+		)
+		await joplin.views.menuItems.create("abc", "test", MenuItemLocation.Tools)
+		await joplin.contentScripts.register(
 			ContentScriptType.CodeMirrorPlugin,
 			"latexAutocomplete",
 			"./codemirror/autocompletion.js"
 		);
-		await joplin.commands.register({
-			name: 'printSomething',
-			label: 'Print some random string',
-			execute: async () => {
-				await joplin.commands.execute('editor.execCommand', {
-					name: 'printSomething',
-					args: ['Anything']
-				});
-			},
-		});
-		await joplin.views.menuItems.create('printSomethingButton', 'printSomething', MenuItemLocation.Tools, { accelerator: 'Ctrl+Alt+Shift+U' });
 	},
 });

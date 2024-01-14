@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@types/codemirror": "^5.60.15",
+    "child_process": "^1.0.2",
     "codemirror": "^5.65.16"
   }
 }
