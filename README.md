@@ -51,3 +51,6 @@ for example:
 ### TODOs
 - [ ] after completion ends move the cursor between all the {} to write and move between them using tab
 - [ ] add history management to show last used completions when there is now trigger symbol.
+### Thanks
+this is my first joplin plugin so I have used [joplin enhancement](https://github.com/SeptemberHX/joplin-plugin-enhancement) as a reference
+how to build codemirror plugin, some of the code might seem a bit similar. 
