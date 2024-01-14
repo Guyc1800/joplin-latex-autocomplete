@@ -3,7 +3,6 @@ import {ContentScriptType, MenuItemLocation} from 'api/types';
 import {latexDictionaryObject, settings} from "./settings";
 import {ContextMsg, ContextMsgType} from "./common";
 import getConfig = settings.getConfig;
-import getDictionary = settings.getDictionary;
 
 joplin.plugins.register({
 	onStart: async function() {

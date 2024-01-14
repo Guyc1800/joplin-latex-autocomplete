@@ -33,7 +33,7 @@ export default class Autocomplete{
     private symbolRange?: {from:Position, to:Position};
     private cursor:Position;
     private readonly TRIGGER_SYMBOL = '\\';
-    private dictionary:{dict:Hint[],history:string[]};
+    private dictionary:Hint[];
     private async getConfig(){
         this.settings = await this.context.postMessage({type:ContextMsgType.GET_CONFIG});
     }
@@ -41,6 +41,7 @@ export default class Autocomplete{
         this.dictionary=await this.context.postMessage({type:ContextMsgType.GET_DICTIONARY});
     }
     private async updateHistory(newHistory:string[]){
+        //not implemented yet
         let content;
         if(!fs.existsSync(this.settings.dictionaryPath)){
             return
@@ -124,7 +125,7 @@ export default class Autocomplete{
         let includes = [];
         let startWith=[];
         let history= [];
-        for(let hint of this.dictionary.dict){
+        for(let hint of this.dictionary){
             if(hint.displayText.startsWith(this.TRIGGER_SYMBOL+keyword))startWith.push(hint)
             else if(hint.displayText.includes(keyword))includes.push(hint)
         }

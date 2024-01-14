@@ -23,11 +23,12 @@ export namespace settings{
         let PLUGIN_SETTINGS={};
         PLUGIN_SETTINGS[LATEX_DICTIONARY_PATH]= {
             type: SettingItemType.String,
-            label: "test",
+            label: "Dictionary Path",
             public: true,
             section: SECTION,
             subType: SettingItemSubType.FilePath,
-            value: "~/.config/joplin-desktop/plugin-data/latexDictionary.json"
+            value: "~/.config/joplin-desktop/plugin-data/latexDictionary.json",
+            description:"the path to the dictionary json file"
         }
         PLUGIN_SETTINGS[ENABLE_LATEX_INLINE]={
             value:true,
@@ -86,6 +87,10 @@ export namespace settings{
                 if(dictPath.startsWith("~")){
                     dictPath= dictPath.replace("~",os.homedir())
                 }
+                if (!fs.existsSync()){
+                    latexDictionaryObject = []
+                }
+
                 await fs.readFile(dictPath,(err: any, data: string)=>{
                     console.log(err);
                     latexDictionaryObject= JSON.parse(data);
@@ -94,9 +99,6 @@ export namespace settings{
         });
         await joplin.commands.execute("LoadDictionary")
         await joplin.views.menuItems.create(LATEX_DICT_LOAD_MENU,"LoadDictionary",MenuItemLocation.Tools)
-    }
-    export async function getDictionary(){
-        return latexDictionaryObject;
     }
 }
 

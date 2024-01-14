@@ -1,10 +1,9 @@
-import { Position,Editor, KeyMap } from "codemirror";
+import { Position,Editor } from "codemirror";
 export interface Hint {
     text: string;//the completion output
     displayText?: string; // the text on the left
-    className?: string; 
+    // className?: string;
     description?: string;
-    render?: (container: Element, completion: Completion, hint: Hint) => void;
     inline: boolean;
 }
 export interface Completion {
