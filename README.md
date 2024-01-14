@@ -49,6 +49,7 @@ for example:
 3. arrows - choose completion.
 4. write "\\" to trigger the autocompletion.
 ### TODOs
+- [ ] add support for Codemirror 6
 - [ ] after completion ends move the cursor between all the {} to write and move between them using tab
 - [ ] add history management to show last used completions when there is now trigger symbol.
 ### Thanks
